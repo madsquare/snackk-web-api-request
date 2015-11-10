@@ -103,11 +103,15 @@ define [
 
             @requestData[reqId] = opts
 
+            deleteCache = () =>
+                delete @hasRequest[reqId]
+                delete @requestData[reqId]
+
             # success
             done = (res, status, response) =>
                 clearTimeout timeoutThisRequest if timeoutThisRequest
                 @repeatTokenRequestCount = 0
-                @deleteCache reqId
+                deleteCache()
                 res.nonce = JSON.parse res.nonce if typeof res.nonce is 'string'
                 @done res, status, response
                 opts.success && opts.success res, status, response
@@ -120,7 +124,7 @@ define [
                     debugger
                     return false 
                     
-                @deleteCache reqId
+                deleteCache()
                 return false if res.readyState is 0 or res.statusText is 'abort' or res.statusText is 'No Transport'
                 
                 if res.responseText
@@ -225,13 +229,6 @@ define [
             @hasRequest[url].reqId = reqId
 
             @hasRequest[url].request = @hasRequest[reqId] = $.ajax options
-
-            $.ajax options
-
-
-        deleteCache = (reqId) =>
-            delete @hasRequest[reqId]
-            delete @requestData[reqId]
 
 
         # request refresh access token

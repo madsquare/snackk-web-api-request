@@ -2,7 +2,7 @@
   "name": "snackk-web-api-request",
   "version": "1.0.0",
   "description": "snackk web api request",
-  "main": "api.js",
+  "main": "request.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/madsquare/snackk-web-api-request.git"
@@ -19,5 +19,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-cson": "^0.16.0",
     "matchdep": "^1.0.0"
+  },
+  "dependencies": {
   }
 }

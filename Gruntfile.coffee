@@ -18,6 +18,7 @@ module.exports = (grunt) ->
 			default: 'app/assets'
 			dist: [
 				'dist/snackk-web-api-request.min.js'
+				'dist/snackk-web-api-request.min.js.map'
 			]
 
 		coffee:
@@ -54,8 +55,20 @@ module.exports = (grunt) ->
 				removeCombined: true 
 				findNestedDependencies: true
 				useStrict: true
-				optimize: 'none'
-				uglify2: 
+				optimize: 'uglify2'
+				# 'amd-dist':
+				# 	all:
+				# 		options: {
+				# 			env: 'browser',
+				# 			exports: 'snackk-web-api-request'
+				# 		},
+				# 		files: [
+				# 			{
+				# 				src: 'api/assets/**/*.js'
+				# 				dest: 'dist/snackk-web-api-request.min.js'
+				# 			}
+				# 		]
+				uglify2:
 					compress:
 						global_defs:
 							DEBUG: false
@@ -68,8 +81,26 @@ module.exports = (grunt) ->
 					out: 'dist/snackk-web-api-request.min.js'
 					onBuildRead: (moduleName, path, contents) ->
 						return contents.replace /\/assets/g, '/dist'
-					include: ['init']
-					name: 'request-config'
+					include: ['../almond', 'request']
+					exclude: ['jquery', 'lodash', 'jquery-cookie', 'jquery-iframe-transport']
+					wrap: {
+                        startFile: 'api/assets/wrap-start.js'
+                        endFile: 'api/assets/wrap-end.js'
+                    }
+
+
+		# 'amd-dist':
+		# 	all:
+		# 		options: {
+		# 			env: 'browser',
+		# 			exports: 'snackk-web-api-request'
+		# 		},
+		# 		files: [
+		# 			{
+		# 				src: 'api/assets/**/*.js'
+		# 				dest: 'dist/snackk-web-api-request.min.js'
+		# 			}
+		# 		]
 
 	grunt.initConfig taskConfig
 
