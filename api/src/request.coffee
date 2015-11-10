@@ -256,7 +256,7 @@ define [
         fail: (res) ->        
 
 
-        done: (res, status, response) =>
+        done: (res, status, response) ->
 
 
         timeoutReqeust: ->
