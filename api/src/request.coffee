@@ -31,6 +31,7 @@ define [
             tokenMgr.init()
             @setHeaderObj opts
             _baseUrl = opts.baseUrl
+            return @
 
 
         ###
