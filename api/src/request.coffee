@@ -19,6 +19,7 @@ define [
         NOT_EXIST_TOKEN: 'token.not_exist'
 
     class Request
+        refreshRequestQueue: []
         options: null
         state: null
         hasRequest: {}
@@ -266,7 +267,79 @@ define [
 
 
         responseError: (message) ->
+
+        TAG: 
+            auth:
+                refresh: 'auth/refresh'
+                clear: 'auth/clear'
+                authorize: 'auth/authorize'
+
+            app:
+                tvs: 'app/tvs'
+                facebooktv: 'app/facebooktv'
+
+            notice: 'app/web'
+
+            search: 
+                target: 'search/:target'
+                url: 'videos/validate'
+
+            channels:
+                get: 'channels'
+                ch_no: 'channels/:ch_no'
+                url: 'channels/:url'
+                broadcast: 'channels/:ch_no'
+                subscribers: 'channels/:ch_no/subscribers'
+                comments: 'channels/:ch_no/comments'
+                comment: 'channels/:ch_no/comments/:cc_no'
+
+            resources:
+                postTemporaryResources: 'user/:us_no/channels/:ch_no/resources/:operation' # 영상 방송
+                putTemporaryResources: 'user/:us_no/channels/:ch_no/resources/:cr_no' # 영상 위치 이동.
+                temporaryResourcesExclude: 'user/:us_no/channels/:ch_no/resources/all/:operation' # 보관함에서 전체선택으로 방송 
+                temporaryResources: 'user/:us_no/channels/:ch_no/resources'
+                temporaryExclude: 'user/:us_no/channels/:ch_no/resources/truncate'
+                cancelTemporary: 'user/:us_no/channels/:ch_no/histories/:hi_no'
+                onair: 'channels/:ch_no/resources'
+                storage: 'user/:us_no/resources'
+                storageProvider: 'user/:us_no/resources/:provider'
+                storageExclude: 'user/:us_no/resources/truncate'
+                resource: 'user/:us_no/resources/:rs_no'
+
+            resource: 
+                get: 'resources/:rs_no'
+
+            user:
+                user: 'user'
+                emailPost: 'user/email/verify'
+                aUser: 'user/:us_no'
+                profile: 'user/:us_no/picture'
+                profileDefault: 'user/:us_no/picture/default'
+                channels: 'user/:us_no/channels'
+                subscriptions: 'user/:us_no/subscriptions'
+                subscribe: 'user/:us_no/subscriptions/:ch_no'
+                channel: 'user/:us_no/channels/:ch_no'
+                channel_logo: 'user/:us_no/channels/:ch_no/logo'
+                channelLogoDefault: 'channels/:ch_no/logo/default'
+                provider: 'user/:us_no/sns/:provider'
+
+            report: 'reports'
+            activity:
+                getActivities: 'activities'
+                read: 'activities/read'
+
+            category: 
+                categories: 'categories'
+                channels: 'categories/:ca_no/channels'
+
+            timeline:
+                channels: 'timelines/channels'
+
+            stat:
+                total: 'channels/:ch_no/stats/:begin/:end/:step'
+                rank: 'channels/:ch_no/stats/ranking'
+
+            event:
+                post: 'events/applicants/:target'
             
-
-
-
+            
