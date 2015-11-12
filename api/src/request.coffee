@@ -254,7 +254,6 @@ define [
         beforeRequest: (options) ->
 
 
-
         fail: (res) ->        
 
 
@@ -268,6 +267,7 @@ define [
 
 
         responseError: (message) ->
+
 
         TAG: 
             auth:
@@ -285,14 +285,16 @@ define [
                 target: 'search/:target'
                 url: 'videos/validate'
 
+            channel: 'channels/:ch_no'
             channels:
                 get: 'channels'
-                ch_no: 'channels/:ch_no'
                 url: 'channels/:url'
-                broadcast: 'channels/:ch_no'
                 subscribers: 'channels/:ch_no/subscribers'
-                comments: 'channels/:ch_no/comments'
-                comment: 'channels/:ch_no/comments/:cc_no'
+                resource: 'channels/:ch_no/resources'
+
+            comment:
+                get: 'channels/:ch_no/comments'
+                unit: 'channels/:ch_no/comments/:cc_no'
 
             resources:
                 postTemporaryResources: 'user/:us_no/channels/:ch_no/resources/:operation' # 영상 방송
@@ -301,30 +303,31 @@ define [
                 temporaryResources: 'user/:us_no/channels/:ch_no/resources'
                 temporaryExclude: 'user/:us_no/channels/:ch_no/resources/truncate'
                 cancelTemporary: 'user/:us_no/channels/:ch_no/histories/:hi_no'
-                onair: 'channels/:ch_no/resources'
+
+            storage:
                 storage: 'user/:us_no/resources'
                 storageProvider: 'user/:us_no/resources/:provider'
                 storageExclude: 'user/:us_no/resources/truncate'
-                resource: 'user/:us_no/resources/:rs_no'
 
-            resource: 
-                get: 'resources/:rs_no'
+            resource: 'resources/:rs_no'
 
             user:
-                user: 'user'
+                get: 'user'
+                unit: 'user/:us_no'
                 emailPost: 'user/email/verify'
-                aUser: 'user/:us_no'
                 profile: 'user/:us_no/picture'
                 profileDefault: 'user/:us_no/picture/default'
                 channels: 'user/:us_no/channels'
                 subscriptions: 'user/:us_no/subscriptions'
                 subscribe: 'user/:us_no/subscriptions/:ch_no'
                 channel: 'user/:us_no/channels/:ch_no'
-                channel_logo: 'user/:us_no/channels/:ch_no/logo'
+                channelLogo: 'user/:us_no/channels/:ch_no/logo'
                 channelLogoDefault: 'channels/:ch_no/logo/default'
                 provider: 'user/:us_no/sns/:provider'
+                resource: 'user/:us_no/resources/:rs_no'
 
             report: 'reports'
+
             activity:
                 getActivities: 'activities'
                 read: 'activities/read'
