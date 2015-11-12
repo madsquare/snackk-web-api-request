@@ -1,7 +1,10 @@
 define [
-    'token'
+    'lodash'
+    'jquery'
+    'jquery-iframe-transport'
 ], (
-    tokenMgr
+    _
+    $
 ) ->
     _version = 'v2'
 
@@ -28,9 +31,9 @@ define [
         timeoutDuration: 7000
 
         constructor: (opts) ->
-            tokenMgr.init()
             @setHeaderObj opts
             _baseUrl = opts.baseUrl
+            @tokenModule = opts.tokenModule
             return @
 
 
@@ -101,7 +104,7 @@ define [
                 options.headers['X-HTTP-Method-Override'] = options.type
                 options.type = 'POST'
 
-            options.headers['Authorization'] = 'Bearer '+ac_token if (ac_token = (tokenMgr.getAccessToken())) && (@state != _AUTH_STATE.REFRESHING)
+            options.headers['Authorization'] = 'Bearer '+ac_token if (ac_token = (@tokenModule.getAccessToken())) && (@state != _AUTH_STATE.REFRESHING)
 
             @requestData[reqId] = opts
 
@@ -146,7 +149,7 @@ define [
                                 @state = null
                                 try
                                     res = JSON.parse(res.responseText) if typeof res is 'string'
-                                    tokenMgr.setToken(res.token)
+                                    @tokenModule.setToken(res.token)
                                     i = 0
                                     while i < @refreshRequestQueue.length
                                         console.debug 'token-expired] queue.실행 : '+@refreshRequestQueue[i].url
@@ -235,12 +238,12 @@ define [
 
         # request refresh access token
         refreshToken: (_callback) ->
-            # @sendErrorSlack '[refresh-CALL:' + name + '] current accessToken: '+tokenMgr.getAccessToken()
+            # @sendErrorSlack '[refresh-CALL:' + name + '] current accessToken: '+@tokenModule.getAccessToken()
             @request 'auth/refresh', {
                 type: 'POST'
-                data: { 'refresh_token': tokenMgr.getRefreshToken() }
+                data: { 'refresh_token': @tokenModule.getRefreshToken() }
                 success: (res) =>
-                    # @sendErrorSlack '[refresh-RESPONSE:' + name + '] current accessToken: '+tokenMgr.getAccessToken()
+                    # @sendErrorSlack '[refresh-RESPONSE:' + name + '] current accessToken: '+@tokenModule.getAccessToken()
                     (_callback && _callback.success) && _callback.success(res)
 
                 error: (res) ->
