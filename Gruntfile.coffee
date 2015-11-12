@@ -82,7 +82,7 @@ module.exports = (grunt) ->
 					onBuildRead: (moduleName, path, contents) ->
 						return contents.replace /\/assets/g, '/dist'
 					include: ['../almond', 'request']
-					exclude: ['jquery', 'lodash', 'jquery-cookie', 'jquery-iframe-transport']
+					exclude: ['jquery', 'lodash', 'jquery-iframe-transport']
 					wrap: {
                         startFile: 'api/assets/wrap-start.js'
                         endFile: 'api/assets/wrap-end.js'
