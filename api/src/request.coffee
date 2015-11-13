@@ -187,10 +187,10 @@ define [
 			if options.dataType.indexOf('iframe') isnt -1
 				originDone = done
 				done = (res, status, response) ->
-				   if !res || typeof res.error isnt 'undefined'
-					  return fail res
+					if !res || typeof res.error isnt 'undefined'
+						return fail res
 
-				   originDone res, status, response
+					originDone res, status, response
 
 				options.method = 'POST'
 				options.formData = []
@@ -350,4 +350,3 @@ define [
 				channels: 'search/recommend/channels'
 				users: 'search/recommend/users'
 				resources: 'search/recommend/resources/group'
-		   
