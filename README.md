@@ -6,24 +6,26 @@ requirejs base ajax wrapper for snackk api
 * request timeout
 * file input
 
-## require 
+
+## Dependencies
+
 * jquery
-* jquery-cookie
 * jquery-iframe-transport
 * lodash
 
-## example
-#### init
-```
-server = new SnackkReqeust 
+
+## Usage
+
+```coffee
+# init
+server = new SnackkReqeust
   'clientId': C.CLIENT_ID
   'clientSecret': C.CLIENT_SECRET
   'versionCode': C.RELEASE_VERSION_CODE
-  'baseUrl': BaseUrl
-```
+  'baseUrl': 'http://api.snackk.tv'
+  'tokenModule': tokenModule
 
-#### how to use
-```
+# how to use
 server.request server.TAG.user.user, _.assign(
   'data': options
 , callback)
