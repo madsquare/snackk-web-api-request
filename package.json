@@ -7,7 +7,14 @@
     "type": "git",
     "url": "git+https://github.com/madsquare/snackk-web-api-request.git"
   },
-  "author": "jin, bella",
+  "contributors": [{
+    "name": "bella",
+    "email": "bella@madsq.net"
+  },{
+    "name": "jin",
+    "email": "jin@madsq.net"
+  }],
+  "author": "madsquare",
   "homepage": "https://github.com/madsquare/snackk-web-api-request#readme",
   "devDependencies": {
     "grunt": "^0.4.5",
