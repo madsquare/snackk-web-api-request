@@ -29,11 +29,13 @@ define [
 		requestData: {}
 		# timeout 시간.
 		timeoutDuration: 7000
+		env: null
 
 		constructor: (opts) ->
 			@setHeaderObj opts
 			_baseUrl = opts.baseUrl
 			@tokenModule = opts.tokenModule
+			@env = opts.env
 			return @
 
 
