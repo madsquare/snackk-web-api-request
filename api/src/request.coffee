@@ -330,7 +330,7 @@ define [
                 channelLogoDefault: 'channels/:ch_no/logo/default'
                 provider: 'user/:us_no/sns/:provider'
                 resource: 'user/:us_no/resources/:rs_no'
-                password: 'user/password'
+                password: 'user/passwd'
 
             report: 'reports'
 
