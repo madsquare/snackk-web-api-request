@@ -29,11 +29,13 @@ define [
         requestData: {}
         # timeout 시간.
         timeoutDuration: 7000
+        env: null
 
         constructor: (opts) ->
             @setHeaderObj opts
             _baseUrl = opts.baseUrl
             @tokenModule = opts.tokenModule
+            @env = opts.env
             return @
 
 
@@ -328,6 +330,7 @@ define [
                 channelLogoDefault: 'channels/:ch_no/logo/default'
                 provider: 'user/:us_no/sns/:provider'
                 resource: 'user/:us_no/resources/:rs_no'
+                password: 'user/password'
 
             report: 'reports'
 
