@@ -66,7 +66,7 @@ define [
             options = 
                 url: _baseUrl + url
                 type: 'GET'
-                headers: _headerObj
+                headers: $.extend {}, _headerObj, true
                 dataType: 'json'
                 contentType: 'application/json; charset=utf-8'
 
@@ -106,6 +106,7 @@ define [
                 options.headers['X-HTTP-Method-Override'] = options.type
                 options.type = 'POST'
 
+            console.log 'getAccessToken: '+@tokenModule.getAccessToken()
             options.headers['Authorization'] = 'Bearer '+ac_token if (ac_token = (@tokenModule.getAccessToken())) && (@state != _AUTH_STATE.REFRESHING)
 
             @requestData[reqId] = opts
@@ -351,5 +352,12 @@ define [
 
             event:
                 post: 'events/applicants/:target'
+            
+            posts: 'posts'
+            post:
+                unit: 'posts/:po_no'
+                comments: 'posts/:po_no/comments'
+                likes: 'posts/:po_no/likes'
+                inPost: 'posts/:po_no/posts'
             
             
