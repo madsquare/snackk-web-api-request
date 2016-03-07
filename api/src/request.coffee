@@ -70,7 +70,7 @@ define [
                 dataType: 'json'
                 contentType: 'application/json; charset=utf-8'
 
-            reqId = url + JSON.stringify opts.data
+            reqId = if opts.data then url + JSON.stringify opts.data else url
             # base url을 제거한 url을 남김.
             reqUrl = url
 
@@ -107,12 +107,13 @@ define [
                 options.type = 'POST'
 
             console.log 'getAccessToken: '+@tokenModule.getAccessToken()
-            options.headers['Authorization'] = 'Bearer '+ac_token if (ac_token = (@tokenModule.getAccessToken())) && (@state != _AUTH_STATE.REFRESHING)
+            options.headers['Authorization'] = 'Bearer '+ac_token if (ac_token = (@tokenModule.getAccessToken())) and (@state != _AUTH_STATE.REFRESHING)
 
             @requestData[reqId] = opts
 
             deleteCache = () =>
                 delete @hasRequest[reqId]
+                delete @hasRequest[url]
                 delete @requestData[reqId]
 
             # success
@@ -120,7 +121,7 @@ define [
                 clearTimeout timeoutThisRequest if timeoutThisRequest
                 @repeatTokenRequestCount = 0
                 deleteCache()
-                res.nonce = JSON.parse res.nonce if typeof res.nonce is 'string'
+                # res.nonce = JSON.parse res.nonce if typeof res.nonce is 'string'
                 @done res, status, response
                 opts.success && opts.success res, status, response
 
@@ -139,6 +140,7 @@ define [
                     tempError = JSON.parse res.responseText
                     error = tempError.error if tempError
 
+                # alert "error url(#{url}): "+JSON.stringify(error)
 
                 # token
                 if error && error.type is 'common.expired_access_token'
@@ -147,7 +149,7 @@ define [
                         @refreshRequestQueue.push { url: reqUrl, data: opts } 
                     if @state isnt _AUTH_STATE.REFRESHING
                         @state = _AUTH_STATE.REFRESHING
-                        @refreshToken {
+                        @refreshToken url, {
                             success: (res) =>
                                 @state = null
                                 try
@@ -165,6 +167,7 @@ define [
                             }
                         return res
                 else if error and error.type is 'common.not_exist_token'
+                    console.error "[server] not_exist_token - url: "+url
                     if @state isnt _AUTH_STATE.NOT_EXIST_TOKEN and url isnt 'auth/refresh'
                         @state = _AUTH_STATE.NOT_EXIST_TOKEN
                         debugger
@@ -177,9 +180,9 @@ define [
                         return
                 else 
                     if (opts.error and opts.error error) isnt false
-                        if error and error.code isnt 500
+                        if error
                             setTimeout (=>
-                                @responseError error.message
+                                @responseError error
                                 ), 100
                 
                 @fail res
@@ -240,7 +243,12 @@ define [
 
 
         # request refresh access token
-        refreshToken: (_callback) ->
+        refreshToken: (url, _callback) ->
+            # alert 'refresh: '+@tokenModule.getRefreshToken()
+            # console.log('refreshToken: '+@tokenModule.getRefreshToken())
+            # alert 'refresh-url: '+url
+            # alert 'refresh-clientId: '+_headerObj['X-SNACKK-CLIENT-ID']
+
             # @sendErrorSlack '[refresh-CALL:' + name + '] current accessToken: '+@tokenModule.getAccessToken()
             @request 'auth/refresh', {
                 type: 'POST'
@@ -284,12 +292,15 @@ define [
             app:
                 tvs: 'app/tvs'
                 facebooktv: 'app/facebooktv'
+                banners: 'config/banners'
 
             notice: 'app/web'
+            help: '/help/inquire/:type'
 
             search: 
                 target: 'search/:target'
                 url: 'videos/validate'
+                board: 'search/keywords/board'
 
             channel: 'channels/:ch_no'
             channels:
@@ -323,21 +334,26 @@ define [
                 emailPost: 'user/email/verify'
                 profile: 'user/:us_no/picture'
                 profileDefault: 'user/:us_no/picture/default'
-                channels: 'user/:us_no/channels'
-                subscriptions: 'user/:us_no/subscriptions'
                 subscribe: 'user/:us_no/subscriptions/:ch_no'
-                channel: 'user/:us_no/channels/:ch_no'
+                subscriptionCards: 'user/:us_no/subscriptions/cards'
                 channelLogo: 'user/:us_no/channels/:ch_no/logo'
                 channelLogoDefault: 'channels/:ch_no/logo/default'
                 provider: 'user/:us_no/sns/:provider'
                 resource: 'user/:us_no/resources/:rs_no'
                 password: 'user/passwd'
+                notification: 'user/:us_no/notification'
+                following: 'user/:us_no/following'
+                following_target: 'user/:us_no/following/:target'
+                followers: 'user/:us_no/followers'
+                keywords: 'user/:us_no/config/keywords'
+
 
             report: 'reports'
 
             activity:
                 getActivities: 'activities'
                 read: 'activities/read'
+                targetRead: 'activities/:ac_no/read'
 
             category: 
                 categories: 'categories'
@@ -353,11 +369,20 @@ define [
             event:
                 post: 'events/applicants/:target'
             
-            posts: 'posts'
-            post:
-                unit: 'posts/:po_no'
-                comments: 'posts/:po_no/comments'
-                likes: 'posts/:po_no/likes'
-                inPost: 'posts/:po_no/posts'
-            
+            # posts: 'posts'
+            # post:
+            #     unit: 'posts/:po_no'
+            #     comments: 'posts/:po_no/comments'
+            #     likes: 'posts/:po_no/likes'
+            #     inPost: 'posts/:po_no/posts'
+
+            cards: 'cards'
+            card:
+                unit: 'cards/:ca_no'
+                feed: 'cards/feed'
+                comments: 'cards/:ca_no/comments'
+                likes: 'cards/:ca_no/likes'
+                like: 'cards/:ca_no/likes/:cl_no'
+                inCard: 'cards/:ca_no/resources'
+
             
